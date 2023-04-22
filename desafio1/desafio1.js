@@ -1,30 +1,32 @@
 class ProductManager{
     constructor(products){
         this.products = products;
-        this.idCounter = 0;
-    };
-
-    iniciar = () => {
         this.products = [];
         this.idCounter = 1;
-    }
+    };
 
-    addProduct = (tit,desc,pric,thumb,cod,sto) => {
-        
-        if (!tit || !desc || !pric || !thumb || !cod || !sto){
-            console.error("Todos los campos son obligatorios");        
+    // iniciar = () => {
+    //     this.products = [];
+    //     this.idCounter = 1;
+    // }
+
+    addProduct = ({ title, description, price, thumbnail, code, stock }) => {
+        if (!title || !description || !price || !thumbnail || code < 0 || !stock){
+            console.error("Todos los campos son obligatorios");   
+            return;     
         }
 
-        const product ={
+        const product = {
             id: this.idCounter,
-            title: tit,
-            description: desc,
-            price: pric,
-            thumbnail:thumb,
-            code: cod,
-            stock:sto
-        }
-        let exist;
+            title,
+            description,
+            price,
+            thumbnail,
+            code,
+            stock
+        };
+
+        let exist = false;
         this.products.forEach(prod => {
             if (prod.code === product.code)
             exist = true;            
@@ -42,15 +44,18 @@ class ProductManager{
         return this.products;
     }
 
-    getById(id){
-        const prods = this.getProducts();
+    getProductById(id){
+        // const prods = this.getProducts();
         //devuelvo indice de primer elemento que cumpla la condicion
-        const indice = prods.findIndex((element) => element.id === id);
+        // const indice = prods.findIndex((element) => element.id === id);
+        const indice = this.products.findIndex((element) => element.id === id);
         if (indice < 0 ){
             //devuelvo null y termino ejecucion
             console.error('Not found');
+            return;
+        }else{
+            return this.products[indice];        
         }
-        return prods[indice];        
     }
 
 }
@@ -58,21 +63,21 @@ class ProductManager{
 let products;
 
 let productManager1 = new ProductManager(products);
-productManager1.iniciar();
-
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 0, 10);
-productManager1.addProduct("verduleria", "manzana", 600, "sin imagen", 1, 100);
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 0, 10);
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 2, 10);
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 5, 10);
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 1, 10);
-productManager1.addProduct("almacen", "gaseosa", 300, "sin imagen", 0, 10);
+// productManager1.iniciar();
 
 
+productManager1.addProduct({ title: "almacen", description: "gaseosa", price: 300, thumbnail: "sin imagen", code: 0, stock: 10 });
+productManager1.addProduct({ title: "verduleria", description: "manzana", price: 600, thumbnail: "sin imagen", code: 1, stock: 100 });
+productManager1.addProduct({ title: "almacen", description: "gaseosa", price: 300, thumbnail: "sin imagen", code: 0, stock: 10 });
+productManager1.addProduct({ title: "almacen", description: "gaseosa", price: 300, thumbnail: "sin imagen", code: 2, stock: 10 });
+productManager1.addProduct({ title: "almacen", description: "gaseosa", price: 300, thumbnail: "sin imagen", code: 5, stock: 10 });
+productManager1.addProduct({ title: "almacen", description: "gaseosa", price: 300, thumbnail: "sin imagen", code: 1, stock: 10 });
 
-// console.log(productManager1.getProducts());
 
-console.log(productManager1.getById(7));
+
+console.log(productManager1.getProducts());
+
+console.log(productManager1.getProductById(3));
 
 
 
